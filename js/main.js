@@ -62,10 +62,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     pixelCounts.push({ color: rgb, veces: 1 });
                 }
             }
-            MostrarResumen(pixelCounts);
+            MostrarResumen(pixelCounts,false);
 
         }, 1000);
-        MostrarResumen(pixelCounts);
+        MostrarResumen(pixelCounts,true);
     }
 
     function compararPorNombre(a, b) {
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return comparacion;
     }
 
-    function MostrarResumen(pixelCounts) {
+    function MostrarResumen(pixelCounts, paso) {
         // Limpiar la tabla
         let contador = 0;
         resumenTabla.innerHTML = '';
@@ -95,10 +95,16 @@ document.addEventListener('DOMContentLoaded', function () {
             contador++;
             const count = pixelCounts[color].veces;
             let colorP = pixelCounts[color].color;
-            ProbabilidadN = Number(count / pixelesTotal);
-            Frecuencia = Number(Math.log(ProbabilidadN) / Math.log(2))
-            ProbaSuma = ProbaSuma + Number(count / pixelesTotal);
-            Entropia += ProbabilidadN * Frecuencia;
+            if(!paso){    
+                ProbabilidadN = "--";
+                Frecuencia = "--";
+                ProbaSuma = 1;        
+            }else{                
+                ProbabilidadN = Number(count / pixelesTotal);
+                Frecuencia = Math.abs(Number(Math.log(ProbabilidadN) / Math.log(2)));
+                ProbaSuma = ProbaSuma + Number(count / pixelesTotal);
+                Entropia += Math.abs(ProbabilidadN * Frecuencia);
+            }
             HtmlTabla += `<tr style=" background-color: rgba(${colorP});"><td style="color: rgba(${colorP}); filter: invert(100%);">rgba(${colorP})</td>
             <td style="color: rgba(${colorP}); filter: invert(100%);">${count}</td>
             <td style="color: rgba(${colorP}); filter: invert(100%);">${ProbabilidadN}</td>
