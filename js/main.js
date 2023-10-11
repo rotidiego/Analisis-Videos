@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const interval = setInterval(function () {
             if (video.paused || video.ended) {
                 clearInterval(interval);
+                MostrarResumen(pixelCounts,true);
                 return;
             }
 
@@ -65,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function () {
             MostrarResumen(pixelCounts,false);
 
         }, 1000);
-        MostrarResumen(pixelCounts,true);
     }
 
     function compararPorNombre(a, b) {
