@@ -20,27 +20,67 @@
         </li>
     </div>
     <hr><br>
-    <h1 style="text-align: center;"> Calcular entropia y cantidad de simbolos de un video</h1>
+    <h1 style="text-align: center;"> Analizar videos de entrada y salida</h1>
     <br>
-    <div>
-        <label for="videoInput" class="form-label">Cargue el video a analizar</label><br>
-        <input class="fileInput" accept="video/*" id="videoInput" type="file">
-    </div>
-    <br>
-    <hr>
-    <div class="row">
-        <div class="col">
-            <video id="video" width="540px" controls style="display: none;"></video>
-        </div>
-        <div class="col">
-            <canvas id="canvas" width="540px"  style="display:none; border: 1px solid gray;"></canvas>
+    <div style="padding:20px; justify-content: center; display: flex;">
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-primary" onclick="AnalisisVideo1()"> Analizar Videos </button>
+            </div>
+            <div class="col">
+                <button class="btn btn-danger" onclick="location.reload()"> Reiniciar Proceso </button>
+            </div>
         </div>
     </div>
-    <hr>
-    <div id="resumen">
+    <table id="resumenGeneral" class="table"></table>
+    <div id="vid1" style="display: none;" style="border: 1px solid;">
+        <h2>Ingrese el Video #1</h2>
+        <div>
+            <label for="videoInput" class="form-label">Cargue el video a analizar</label><br>
+            <input class="fileInput" accept="video/*" id="videoInput" type="file">
+        </div>
+        <br>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <video id="video" width="540px" controls style="display: none;"></video>
+            </div>
+            <div class="col">
+                <canvas id="canvas" width="540px" style="display:none; border: 1px solid gray;"></canvas>
+            </div>
+        </div>
+        <hr>
+        <div id="resumen">
+        </div>
+        <button id="btnVid1" class="btn btn-primary" style="display: none;" onclick="AnalisisVideo2()">Analizar el
+            siguiente Video</button>
+        <table id="pixelTable" class="table">
+        </table>
     </div>
-    <table id="pixelTable" class="table">
-    </table>
+    <div id="vid2" style="display: none;" style="border: 1px solid;">
+        <h2>Ingrese el Video #2</h2>
+        <div>
+            <label for="videoInput1" class="form-label">Cargue el video a analizar</label><br>
+            <input class="fileInput" accept="video/*" id="videoInput1" type="file">
+        </div>
+        <br>
+        <hr>
+        <div class="row">
+            <div class="col">
+                <video id="video1" width="540px" controls style="display: none;"></video>
+            </div>
+            <div class="col">
+                <canvas id="canvas1" width="540px" style="display:none; border: 1px solid gray;"></canvas>
+            </div>
+        </div>
+        <hr>
+        <div id="resumen1">
+        </div>
+        <button id="btnVid2" class="btn btn-primary" style="display: none;" onclick="AnalisisGeneral()">Mostrar
+            analisis</button>
+        <table id="pixelTable1" class="table">
+        </table>
+    </div>
 
     <script src="js/main.js">
     </script>
@@ -53,6 +93,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.2/xlsx.full.min.js"></script>
+    <script type="text/javascript" src="javascript/convert.js"></script>
 </body>
 
 </html>
