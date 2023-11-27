@@ -213,32 +213,43 @@ function exportWorksheet(jsonObject, myFile) {
     XLSX.writeFile(myWorkBook, myFile);
 }
 
-function calculateCorrelation(arre1, arre2) {
-    let lengthVid = 0;
-    if (arre1.length > arre2.length) {
-        lengthVid = arre2.length;
-    }else{
-        lengthVid = arre1.length;
-    }
-
-    let arr1 = [];
-    let arr2 = [];
-    for (let i = 0; i<lengthVid;i++){
+function calculateCorrelation(arreglo1, arreglo2) {
+    let arre1 = [];
+    let arre2 = [];
+    for (const color1 of arreglo1) {
+        for (const color2 of arreglo2) {
+          if (color1.color === color2.color) {
+            arre1.push(color1);
+            arre1.push(color2);
+            // Opcional: Si solo quieres agregar el color una vez, rompe el bucle interno aquí
+            // break;
+          }
+        }
+      }
+      if (arre1.length== 0){
+        document.getElementById("textCorrelacion").innerHTML = "La correlación de los videos es de 0";
+        throw new Error("Los conjuntos de datos deben tener la misma longitud");
+      }
+      arre1.sort((a, b) => a.color.localeCompare(b.color));
+      arre2.sort((a, b) => a.color.localeCompare(b.color));
+      let arr1 = [];
+      let arr2 = [];
+    for (let i = 0; i<arre1.length;i++){
         
         arr1.push(arre1[i].veces);
         arr2.push(arre2[i].veces);
     }
 
     // Calcular medias
-    const meanArr1 = arr1.reduce((acc, val) => acc + val, 0) / arr1.length;
-    const meanArr2 = arr2.reduce((acc, val) => acc + val, 0) / arr2.length;
+    const meanArr1 = arr1.reduce((acc, val) => acc + val, 0) / arreglo1.length;
+    const meanArr2 = arr2.reduce((acc, val) => acc + val, 0) / arreglo2.length;
 
     // Calcular términos necesarios para la fórmula de correlación
     let numerator = 0;
     let denominatorX = 0;
     let denominatorY = 0;
 
-    for (let i = 0; i < lengthVid; i++) {
+    for (let i = 0; i < arr1.length; i++) {
         const diffX = arr1[i] - meanArr1;
         const diffY = arr2[i] - meanArr2;
 
