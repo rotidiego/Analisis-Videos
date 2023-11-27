@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             //MostrarResumen(pixCount,false, selectvid);
 
-        }, 1000);
+        }, 2000);
     }
 
 
@@ -218,31 +218,27 @@ function calculateCorrelation(arreglo1, arreglo2) {
     let arre2 = [];
     for (const color1 of arreglo1) {
         for (const color2 of arreglo2) {
-          if (color1.color === color2.color) {
-            arre1.push(color1);
-            arre1.push(color2);
-            // Opcional: Si solo quieres agregar el color una vez, rompe el bucle interno aquí
-            // break;
-          }
+            if(color1.color == color2.color){
+                arre2.push(color2);
+                arre1.push(color1);
+            }
         }
-      }
-      if (arre1.length== 0){
+    }
+    if (arre1.length == 0 || arre1.length != arre2.length) {
         document.getElementById("textCorrelacion").innerHTML = "La correlación de los videos es de 0";
         throw new Error("Los conjuntos de datos deben tener la misma longitud");
-      }
-      arre1.sort((a, b) => a.color.localeCompare(b.color));
-      arre2.sort((a, b) => a.color.localeCompare(b.color));
-      let arr1 = [];
-      let arr2 = [];
-    for (let i = 0; i<arre1.length;i++){
-        
+    }
+    let arr1 = [];
+    let arr2 = [];
+    for (let i = 0; i < arre1.length; i++) {
+
         arr1.push(arre1[i].veces);
         arr2.push(arre2[i].veces);
     }
 
     // Calcular medias
-    const meanArr1 = arr1.reduce((acc, val) => acc + val, 0) / arreglo1.length;
-    const meanArr2 = arr2.reduce((acc, val) => acc + val, 0) / arreglo2.length;
+    const meanArr1 = arr1.reduce((acc, val) => acc + val, 0) / arr1.length;
+    const meanArr2 = arr2.reduce((acc, val) => acc + val, 0) / arr2.length;
 
     // Calcular términos necesarios para la fórmula de correlación
     let numerator = 0;
