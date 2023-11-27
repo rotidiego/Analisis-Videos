@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-    function MostrarResumen(pixlCounts, paso, selectvid,pixTotal) {
+    function MostrarResumen(pixlCounts, paso, selectvid, pixTotal) {
         // Limpiar la tabla
         let contador = 0;
         resumenTabla.innerHTML = '';
@@ -188,6 +188,7 @@ function AnalisisVideo2() {
     blockVid2.style.display = "block";
 }
 function AnalisisGeneral() {
+    calculateCorrelation(pixelCounts, pixelCounts2);
     blockVid1.style.display = "block";
     blockVid2.style.display = "block";
     let tablaGeneral = document.getElementById("resumenGeneral");
@@ -196,19 +197,58 @@ function AnalisisGeneral() {
     htmlResume += "<tr><td>2</td><td>" + Entro2 + "</td><td>" + Prob2 + "</td><td>" + simb2 + "</td><td>" + pix2 + "</td><td><button class='btn btn-primary' onclick='verResumen(2)'>Ver Analisis</button></td></td></tr>";
     tablaGeneral.innerHTML = htmlResume;
 }
-function verResumen(selectvid){
+function verResumen(selectvid) {
     let data;
 
-    if (selectvid == 1){
-        exportWSPlus(pixelCounts, "Analisis Video1.xlsx");
-    }else{
-        exportWSPlus(pixelCounts2, "Analisis Video2.xlsx");
-    }		
+    if (selectvid == 1) {
+        exportWorksheet(pixelCounts, "Analisis Video1.xlsx");
+    } else {
+        exportWorksheet(pixelCounts2, "Analisis Video2.xlsx");
+    }
 }
 function exportWorksheet(jsonObject, myFile) {
     var myWorkSheet = XLSX.utils.json_to_sheet(jsonObject);
     var myWorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(myWorkBook, myWorkSheet, "myWorkSheet");
     XLSX.writeFile(myWorkBook, myFile);
-  }
-  
+}
+
+function calculateCorrelation(arre1, arre2) {
+    let lengthVid = 0;
+    if (arre1.length > arre2.length) {
+        lengthVid = arre2.length;
+    }else{
+        lengthVid = arre1.length;
+    }
+
+    let arr1 = [];
+    let arr2 = [];
+    for (let i = 0; i<lengthVid;i++){
+        
+        arr1.push(arre1[i].veces);
+        arr2.push(arre2[i].veces);
+    }
+
+    // Calcular medias
+    const meanArr1 = arr1.reduce((acc, val) => acc + val, 0) / arr1.length;
+    const meanArr2 = arr2.reduce((acc, val) => acc + val, 0) / arr2.length;
+
+    // Calcular términos necesarios para la fórmula de correlación
+    let numerator = 0;
+    let denominatorX = 0;
+    let denominatorY = 0;
+
+    for (let i = 0; i < lengthVid; i++) {
+        const diffX = arr1[i] - meanArr1;
+        const diffY = arr2[i] - meanArr2;
+
+        numerator += diffX * diffY;
+        denominatorX += diffX ** 2;
+        denominatorY += diffY ** 2;
+    }
+
+    // Calcular la correlación de Pearson
+    const correlation = numerator / Math.sqrt(denominatorX * denominatorY);
+    document.getElementById("textCorrelacion").innerHTML = "La correlación de los videos es de " + correlation;
+    console.log(correlation);
+}
