@@ -216,11 +216,13 @@ function exportWorksheet(jsonObject, myFile) {
 function calculateCorrelation(arreglo1, arreglo2) {
     let arre1 = [];
     let arre2 = [];
+    let arre3 = [];
     for (const color1 of arreglo1) {
         for (const color2 of arreglo2) {
             if(color1.color == color2.color){
                 arre2.push(color2);
                 arre1.push(color1);
+                arre1.push({ color: color1.color, veces: Number(color1.veces + color2.veces) });
             }
         }
     }
@@ -253,9 +255,45 @@ function calculateCorrelation(arreglo1, arreglo2) {
         denominatorX += diffX ** 2;
         denominatorY += diffY ** 2;
     }
+                
 
     // Calcular la correlación de Pearson
     const correlation = numerator / Math.sqrt(denominatorX * denominatorY);
-    document.getElementById("textCorrelacion").innerHTML = "La correlación de los videos es de " + correlation;
+    MostrarResumenMutua(arre3, true,  pixelesTotal, correlation);
     console.log(correlation);
 }
+
+    function MostrarResumenMutua(pixlCounts, paso,  pixTotal, corr) {
+        // Limpiar la tabla
+        let contador = 0;
+        resumenTabla.innerHTML = '';
+        HtmlTabla = "<tr><th>Color</th><th>Cantidad</th><th>Probabilidad</th><th>Frecuencia I(Sn)</th></tr>";
+        //pixelCounts.sort(compararPorNombre);
+        let Frecuencia = 0;
+        let ProbabilidadN = 0;
+        let Entropia = 0;
+        let ProbaSuma = 0;
+        for (const color in pixlCounts) {
+            contador++;
+            const count = pixlCounts[color].veces;
+            let colorP = pixlCounts[color].color;
+            if (!paso) {
+                ProbabilidadN = "--";
+                Frecuencia = "--";
+                ProbaSuma = 1;
+            } else {
+                ProbabilidadN = Number(count / pixTotal);
+                Frecuencia = Math.abs(Number(Math.log(ProbabilidadN) / Math.log(2)));
+                ProbaSuma = ProbaSuma + Number(count / pixTotal);
+                Entropia += Math.abs(ProbabilidadN * Frecuencia);
+            }
+            /*HtmlTabla += `<tr style=" background-color: rgba(${colorP});"><td style="color: rgba(${colorP}); filter: invert(100%);">rgba(${colorP})</td>
+            <td style="color: rgba(${colorP}); filter: invert(100%);">${count}</td>
+            <td style="color: rgba(${colorP}); filter: invert(100%);">${ProbabilidadN}</td>
+            <td style="color: rgba(${colorP}); filter: invert(100%);">${Frecuencia}</td></tr>`;*/
+        }
+        let mutua = 0;
+        mutua = Number(Entro1) + Number(Entro2) - Number(Entropia)
+    document.getElementById("textCorrelacion").innerHTML = "La correlación de los videos es de " + correlation + " la información muta es: " + mutua + ", La entropia mutua es: " + Entropia;
+
+    }
