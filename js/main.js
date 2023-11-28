@@ -220,9 +220,10 @@ function calculateCorrelation(arreglo1, arreglo2) {
     for (const color1 of arreglo1) {
         for (const color2 of arreglo2) {
             if(color1.color == color2.color){
+                arre3.push({ color: color1.color, veces: (color1.veces + color2.veces) });
                 arre2.push(color2);
                 arre1.push(color1);
-                arre1.push({ color: color1.color, veces: Number(color1.veces + color2.veces) });
+                
             }
         }
     }
@@ -260,6 +261,7 @@ function calculateCorrelation(arreglo1, arreglo2) {
     // Calcular la correlación de Pearson
     const correlation = numerator / Math.sqrt(denominatorX * denominatorY);
     MostrarResumenMutua(arre3, true,  pixelesTotal, correlation);
+        exportWorksheet(arre3, "DatosMutuos.xlsx");
     console.log(correlation);
 }
 
